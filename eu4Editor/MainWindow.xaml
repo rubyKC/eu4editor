@@ -1,0 +1,226 @@
+﻿<Window x:Class="Eu4Editor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Eu4Editor"
+        xmlns:drawingVisual="clr-namespace:Eu4Editor.DrawingVisual"
+        xmlns:readEu4Config="clr-namespace:ReadEu4Config"
+        mc:Ignorable="d"
+        Title="P社编辑器 Ver 0.27 " Height="600" Width="1200" FontSize="12" FontFamily="宋体" TextOptions.TextFormattingMode="Display" WindowStartupLocation="CenterScreen">
+    <Grid DataContext="{StaticResource Locator}" Background="White" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <!--<Image Source="Files\provinces.bmp" Stretch="Uniform" MouseWheel="img_MouseWheel" ClipToBounds="True" >
+            <Image.RenderTransform>
+                <ScaleTransform x:Name="tf" />
+            </Image.RenderTransform>
+
+        </Image>-->
+
+
+        <!--<Grid  MouseMove="MasterImage_MouseMove" MouseWheel="MasterImage_MouseWheel" MouseLeftButtonDown="MasterImage_MouseLeftButtonDown" 
+                            MouseLeftButtonUp="MasterImage_MouseLeftButtonUp" >
+
+            <Image RenderOptions.BitmapScalingMode="NearestNeighbor" x:Name="MasterImage" Source="Files\provinces.bmp" Stretch="Uniform">
+                <Image.RenderTransform>
+                    <TransformGroup >
+                        <ScaleTransform />
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+
+        </Grid>-->
+
+        <!--<Grid MouseMove="MasterImage_MouseMove" MouseWheel="MasterImage_MouseWheel" MouseLeftButtonDown="MasterImage_MouseLeftButtonDown" 
+                            MouseLeftButtonUp="MasterImage_MouseLeftButtonUp"  >
+            <Viewbox  x:Name="MasterImage" Stretch="Uniform" >
+                <Grid x:Name="canvas">
+                    <Image   Source="Files\provinces.bmp" RenderOptions.BitmapScalingMode="NearestNeighbor">
+                        <Image.RenderTransform>
+                            <TransformGroup >
+                                <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <drawingVisual:MyVisualHost1 x:Name="MyVisualHost1">
+                        <drawingVisual:MyVisualHost1.CacheMode>
+                            <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False"/>
+                        </drawingVisual:MyVisualHost1.CacheMode>
+                    </drawingVisual:MyVisualHost1>
+                </Grid>
+
+
+                <Viewbox.RenderTransform>
+                    <TransformGroup >
+                        <ScaleTransform />
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Viewbox.RenderTransform>
+                
+               
+            </Viewbox>
+
+        </Grid>-->
+
+        <ToolBar  FontSize="14" FontFamily="宋体" Grid.ColumnSpan="2">
+            <!--<Button Content="国家" Click="CountryMap_OnClick"/>-->
+            <ComboBox ItemsSource="{Binding Main.MapModeObjects}" SelectedIndex="0" SelectedItem="{Binding Main.SelectModeObject}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" Margin="5,0,0,0" Foreground="Black" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Description,StringFormat='(\{0\})'}" Margin="10,0,0,0" FontSize="12" Foreground="Gray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox x:Name="tbTag" Text="CHI" Margin="5,0,0,0" MinWidth="100"/>
+            <Button Content="更换选中" Margin="5,0,0,0" Click="ChangeSelectsTag_OnClick"/>
+        </ToolBar>
+   
+        <Grid x:Name="canvas" Grid.Row="1" Grid.Column="0">
+            <Grid  MouseMove="MasterImage_MouseMove" MouseWheel="MasterImage_MouseWheel" MouseLeftButtonDown="MasterImage_MouseLeftButtonDown" 
+                            MouseLeftButtonUp="MasterImage_MouseLeftButtonUp" ClipToBounds="True" >
+                <ContentControl  x:Name="MasterImage" >
+
+                    <!--<Image   Source="Files\provinces.bmp" RenderOptions.BitmapScalingMode="NearestNeighbor" Stretch="None">
+                    <Image.RenderTransform>
+                        <TransformGroup >
+                            <ScaleTransform ScaleX="0.75" ScaleY="0.75" />
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>-->
+                    <drawingVisual:MyVisualHost1 x:Name="MyVisualHost1" Selected="MyVisualHost1_OnSelected"  >
+                        <!--<drawingVisual:MyVisualHost1.CacheMode>
+                            <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False"  RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                        </drawingVisual:MyVisualHost1.CacheMode>-->
+                    </drawingVisual:MyVisualHost1>
+
+                    <ContentControl.RenderTransform>
+                        <TransformGroup >
+                            <ScaleTransform  ScaleX="0.5" ScaleY="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ContentControl.RenderTransform>
+                </ContentControl>
+
+            </Grid>
+
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <!--<RowDefinition/>-->
+            </Grid.RowDefinitions>
+
+            <!--<StackPanel Grid.Row="0" Margin="5">
+                <TextBlock Text="{Binding Main.SelectedProv.Id}"></TextBlock>
+                <TextBlock Text="{Binding Main.SelectedProv.Name}"></TextBlock>
+                <TextBlock Text="{Binding Main.SelectedProv.Owner}"></TextBlock>
+            </StackPanel>-->
+
+            <TreeView Grid.Row="1" x:Name="tree" ItemsSource="{Binding Main.Root,IsAsync=True}" >
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="选择Tag" Click="MenuItem_OnClick"/>
+                        <MenuItem Header="打开文件夹" Click="MenuItem_OnClick4"/>
+                        <MenuItem Header="打开文件" Click="MenuItem_OnClick1"/>
+                        <MenuItem Header="刷新文件" Click="MenuItem_OnClick2"/>
+
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Style.Setters>
+                            <Setter Property="IsExpanded" Value="True"></Setter>
+                        </Style.Setters>
+                    </Style>
+                    <HierarchicalDataTemplate DataType="{x:Type local:Prov}" ItemsSource="{Binding Config.Items}" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Id,StringFormat='(\{0\})'}"  Foreground="Gray" FontSize="14"/>
+                            
+                            <TextBlock Text="{Binding Name}" Margin="5,0,0,0" FontSize="14"/>
+                      
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+
+                    <HierarchicalDataTemplate DataType="{x:Type readEu4Config:JObject}" ItemsSource="{Binding Items}" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"/>
+
+                            <TextBlock Text="{Binding Remark}" Foreground="Green" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+
+                    <HierarchicalDataTemplate DataType="{x:Type readEu4Config:JProperty}" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text=" = " />
+                            <TextBlock Text="{Binding Value}"/>
+
+                            <TextBlock Text="{Binding Remark}" Foreground="Green" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+            
+            <!--<Grid Grid.Row="0" Background="White" >
+                <Border BorderBrush="Silver" BorderThickness="1">
+                    <Image Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="{Binding Main.Source}" />
+                </Border>
+
+                <Border BorderBrush="Silver" BorderThickness="1" Opacity="0.5" Visibility="Collapsed">
+                    <Image x:Name="overlap" Stretch="Uniform" Source="{Binding Main.Source1}" Opacity="1"/>
+                </Border>
+
+                <Viewbox Stretch="Uniform" >
+                    <Canvas x:Name="canvas1" >
+                    </Canvas>
+                </Viewbox>
+            </Grid>
+
+           
+            
+            <ListBox Grid.Row="1" ItemsSource="{Binding Main.Provs}" SelectionChanged="Selector_OnSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Color}"/>
+                            <TextBlock Text="{Binding Points.Count}" Margin="5,0,0,0" Foreground="Red"/>
+                            <TextBlock Text="{Binding Region}" Margin="5,0,0,0" Foreground="Blue"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <ListBox x:Name="lb" Grid.Row="2" SelectionChanged="Lb_OnSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Pts.Length}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>-->
+        </Grid>
+
+        <Grid Grid.ColumnSpan="2" Grid.Row="2" Height="30" >
+              <ProgressBar   Value="{Binding Main.Percent}"/>
+              <TextBlock Text="{Binding Main.Write}" Margin="0,0,0,5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+      
+
+    </Grid>
+</Window>
