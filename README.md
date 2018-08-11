@@ -23,3 +23,12 @@ hoi4
 ![images](https://raw.githubusercontent.com/xzbrillia/eu4editor/master/vic2.jpg)
 
 vic2
+
+
+=============================================================================
+
+1.  pull code  and use visual studio 2017 (or other c# editor) open project
+
+2.  rebuilt project auto down all reference (all reference use nuget ,so you need have network ) 
+
+3.  run 
